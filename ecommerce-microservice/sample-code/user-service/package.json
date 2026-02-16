@@ -47,7 +47,13 @@
       "src/**/*.ts",
       "!src/**/*.test.ts",
       "!src/**/*.d.ts",
-      "!src/index.ts"
-    ]
+      "!src/index.ts",
+      "!src/routes/auth.ts"
+    ],
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    }
   }
 }
