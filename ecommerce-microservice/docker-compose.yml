@@ -121,7 +121,7 @@ services:
     environment:
       <<: *common-env
       PORT: 3001
-      DB_HOST: postgres
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/payments?sslmode=disable
       DB_PORT: 5432
       DB_NAME: users
       DB_USER: postgres
@@ -166,65 +166,73 @@ services:
   #   networks: [ecommerce]
   #   depends_on: [postgres, kafka]
 
-  # payment-service:
-  #   build: ./sample-code/payment-service
-  #   environment:
-  #     <<: *common-env
-  #     PORT: 3005
-  #     DB_HOST: postgres
-  #     KAFKA_BROKERS: kafka:29092
-  #   ports: ["3005:3005"]
-  #   networks: [ecommerce]
-  #   depends_on: [postgres, kafka]
+  payment-service:
+    build: ./sample-code/payment-service
+    environment:
+      <<: *common-env
+      PORT: 3005
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/payments?sslmode=disable
+      KAFKA_BROKERS: kafka:29092
+    ports: ["3005:3005"]
+    networks: [ecommerce]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
 
-  # cart-service:
-  #   build: ./sample-code/cart-service
-  #   environment:
-  #     <<: *common-env
-  #     PORT: 3006
-  #     REDIS_URL: redis://redis:6379
-  #   ports: ["3006:3006"]
-  #   networks: [ecommerce]
-  #   depends_on: [redis]
+  cart-service:
+    build: ./sample-code/cart-service
+    environment:
+      <<: *common-env
+      PORT: 3006
+      REDIS_URL: redis://redis:6379
+    ports: ["3006:3006"]
+    networks: [ecommerce]
+    depends_on: [redis]
 
-  # notification-service:
-  #   build: ./sample-code/notification-service
-  #   environment:
-  #     <<: *common-env
-  #     PORT: 3007
-  #     KAFKA_BROKERS: kafka:29092
-  #   ports: ["3007:3007"]
-  #   networks: [ecommerce]
-  #   depends_on: [kafka]
+  notification-service:
+    build: ./sample-code/notification-service
+    environment:
+      <<: *common-env
+      PORT: 3007
+      KAFKA_BROKERS: kafka:29092
+    ports: ["3007:3007"]
+    networks: [ecommerce]
+    depends_on: [kafka]
 
-  # search-service:
-  #   build: ./sample-code/search-service
-  #   environment:
-  #     <<: *common-env
-  #     PORT: 3008
-  #     ELASTICSEARCH_URL: http://elasticsearch:9200
-  #     KAFKA_BROKERS: kafka:29092
-  #   ports: ["3008:3008"]
-  #   networks: [ecommerce]
-  #   depends_on: [elasticsearch, kafka]
+  search-service:
+    build: ./sample-code/search-service
+    environment:
+      <<: *common-env
+      PORT: 3008
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      KAFKA_BROKERS: kafka:29092
+    ports: ["3008:3008"]
+    networks: [ecommerce]
+    depends_on: [elasticsearch, kafka]
 
-  # review-service:
-  #   build: ./sample-code/review-service
-  #   environment:
-  #     <<: *common-env
-  #     PORT: 3009
-  #     MONGO_URI: mongodb://mongodb:27017/reviews
-  #   ports: ["3009:3009"]
-  #   networks: [ecommerce]
-  #   depends_on: [mongodb]
+  review-service:
+    build: ./sample-code/review-service
+    environment:
+      <<: *common-env
+      PORT: 3009
+      MONGO_URI: mongodb://mongodb:27017/reviews
+    ports: ["3009:3009"]
+    networks: [ecommerce]
+    depends_on: [mongodb]
 
-  # shipping-service:
-  #   build: ./sample-code/shipping-service
-  #   environment:
-  #     <<: *common-env
-  #     PORT: 3010
-  #     DB_HOST: postgres
-  #     KAFKA_BROKERS: kafka:29092
-  #   ports: ["3010:3010"]
-  #   networks: [ecommerce]
-  #   depends_on: [postgres, kafka]
+  shipping-service:
+    build: ./sample-code/shipping-service
+    environment:
+      <<: *common-env
+      PORT: 3010
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/payments?sslmode=disable
+      KAFKA_BROKERS: kafka:29092
+    ports: ["3010:3010"]
+    networks: [ecommerce]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
