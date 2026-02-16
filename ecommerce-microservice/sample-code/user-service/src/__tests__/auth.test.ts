@@ -4,8 +4,10 @@ import { authenticate, authorize } from '../middleware/auth';
 import { UserRole } from '../types';
 
 // Mock jsonwebtoken
+const mockVerify = jest.fn() as jest.MockedFunction<any>;
+
 jest.mock('jsonwebtoken', () => ({
-  verify: jest.fn(),
+  verify: mockVerify,
 }));
 
 // Mock logger
@@ -30,7 +32,7 @@ describe('Auth Middleware', () => {
     mockRes = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
-    };
+    } as Partial<Response>;
     mockNext = jest.fn();
     jest.clearAllMocks();
   });
@@ -40,11 +42,11 @@ describe('Auth Middleware', () => {
       const payload = { userId: 'user-id', email: 'test@example.com', role: UserRole.CUSTOMER };
       mockReq.headers = { authorization: 'Bearer valid-token' };
 
-      (jwt.verify as jest.Mock).mockReturnValue(payload);
+      mockVerify.mockReturnValue(payload);
 
       authenticate(mockReq as AuthenticatedRequest, mockRes as Response, mockNext);
 
-      expect(jwt.verify).toHaveBeenCalledWith('valid-token', 'change-me-in-production');
+      expect(mockVerify).toHaveBeenCalledWith('valid-token', 'change-me-in-production');
       expect(mockReq.user).toEqual(payload);
       expect(mockNext).toHaveBeenCalled();
     });
@@ -75,7 +77,7 @@ describe('Auth Middleware', () => {
     it('should return 401 for invalid token', () => {
       mockReq.headers = { authorization: 'Bearer invalid-token' };
 
-      (jwt.verify as jest.Mock).mockImplementation(() => {
+      mockVerify.mockImplementation(() => {
         throw new Error('Invalid token');
       });
 

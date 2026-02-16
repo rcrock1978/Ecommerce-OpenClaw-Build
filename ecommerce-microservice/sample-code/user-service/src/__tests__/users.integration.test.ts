@@ -1,17 +1,17 @@
 import request from 'supertest';
 import { jest } from '@jest/globals';
 import app from '../index';
-import { User, UserRole } from '../types';
+import { UserRole } from '../types';
 
 // Mock the user model functions
-const mockFindById = jest.fn();
-const mockUpdateUser = jest.fn();
-const mockListUsers = jest.fn();
+const mockFindById = jest.fn() as jest.MockedFunction<any>;
+const mockUpdateUser = jest.fn() as jest.MockedFunction<any>;
+const mockListUsers = jest.fn() as jest.MockedFunction<any>;
 
 jest.mock('../models/user', () => ({
-  findById: (...args: any[]) => mockFindById(...args),
-  updateUser: (...args: any[]) => mockUpdateUser(...args),
-  listUsers: (...args: any[]) => mockListUsers(...args),
+  findById: mockFindById,
+  updateUser: mockUpdateUser,
+  listUsers: mockListUsers,
 }));
 
 // Mock the auth middleware

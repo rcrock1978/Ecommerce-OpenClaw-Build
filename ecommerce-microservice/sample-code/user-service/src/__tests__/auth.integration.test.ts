@@ -4,25 +4,26 @@ import app from '../index';
 import { User, UserRole } from '../types';
 
 // Mock the database functions
-const mockCreateUser = jest.fn();
-const mockFindByEmail = jest.fn();
-const mockFindByIdWithHash = jest.fn();
-const mockVerifyPassword = jest.fn();
+const mockCreateUser = jest.fn() as jest.MockedFunction<any>;
+const mockFindByEmail = jest.fn() as jest.MockedFunction<any>;
+const mockFindByIdWithHash = jest.fn() as jest.MockedFunction<any>;
+const mockVerifyPassword = jest.fn() as jest.MockedFunction<any>;
 
 jest.mock('../models/user', () => ({
-  createUser: (...args: any[]) => mockCreateUser(...args),
-  findByEmail: (...args: any[]) => mockFindByEmail(...args),
-  findByIdWithHash: (...args: any[]) => mockFindByIdWithHash(...args),
-  verifyPassword: (...args: any[]) => mockVerifyPassword(...args),
+  createUser: mockCreateUser,
+  findByEmail: mockFindByEmail,
+  findByIdWithHash: mockFindByIdWithHash,
+  verifyPassword: mockVerifyPassword,
 }));
 
 // Mock jsonwebtoken
-jest.mock('jsonwebtoken', () => ({
-  sign: jest.fn(),
-  verify: jest.fn(),
-}));
+const mockSign = jest.fn() as jest.MockedFunction<any>;
+const mockVerify = jest.fn() as jest.MockedFunction<any>;
 
-import jwt from 'jsonwebtoken';
+jest.mock('jsonwebtoken', () => ({
+  sign: mockSign,
+  verify: mockVerify,
+}));
 
 // Mock logger
 jest.mock('../utils/logger', () => ({
@@ -63,7 +64,7 @@ describe('Auth Routes Integration', () => {
         created_at: newUser.created_at,
         updated_at: newUser.updated_at,
       });
-      (jwt.sign as jest.Mock)
+      mockSign
         .mockReturnValueOnce('access-token')
         .mockReturnValueOnce('refresh-token');
 
@@ -140,7 +141,7 @@ describe('Auth Routes Integration', () => {
 
       mockFindByEmail.mockResolvedValue(user);
       mockVerifyPassword.mockResolvedValue(true);
-      (jwt.sign as jest.Mock)
+      mockSign
         .mockReturnValueOnce('access-token')
         .mockReturnValueOnce('refresh-token');
 
@@ -218,9 +219,9 @@ describe('Auth Routes Integration', () => {
         updated_at: new Date(),
       };
 
-      (jwt.verify as jest.Mock).mockReturnValue({ userId: 'user-id', tokenVersion: 0 });
+      mockVerify.mockReturnValue({ userId: 'user-id', tokenVersion: 0 });
       mockFindByIdWithHash.mockResolvedValue(user);
-      (jwt.sign as jest.Mock)
+      mockSign
         .mockReturnValueOnce('new-access-token')
         .mockReturnValueOnce('new-refresh-token');
 
@@ -237,7 +238,7 @@ describe('Auth Routes Integration', () => {
     });
 
     it('should return 401 for invalid refresh token', async () => {
-      (jwt.verify as jest.Mock).mockImplementation(() => {
+      mockVerify.mockImplementation(() => {
         throw new Error('Invalid token');
       });
 
@@ -253,7 +254,7 @@ describe('Auth Routes Integration', () => {
     });
 
     it('should return 401 if user not found', async () => {
-      (jwt.verify as jest.Mock).mockReturnValue({ userId: 'nonexistent-id', tokenVersion: 0 });
+      mockVerify.mockReturnValue({ userId: 'nonexistent-id', tokenVersion: 0 });
       mockFindByIdWithHash.mockResolvedValue(null);
 
       const response = await request(app)

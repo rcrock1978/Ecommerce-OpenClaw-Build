@@ -3,8 +3,9 @@ import { createUser, findByEmail, findById, findByIdWithHash, updateUser, listUs
 import { User, UserRole } from '../types';
 
 // Mock the database pool
+const mockQuery = jest.fn() as jest.MockedFunction<any>;
 const mockPool = {
-  query: jest.fn(),
+  query: mockQuery,
 };
 
 jest.mock('../config/database', () => ({
@@ -12,9 +13,12 @@ jest.mock('../config/database', () => ({
 }));
 
 // Mock bcrypt
+const mockHash = jest.fn() as jest.MockedFunction<any>;
+const mockCompare = jest.fn() as jest.MockedFunction<any>;
+
 jest.mock('bcrypt', () => ({
-  hash: jest.fn(),
-  compare: jest.fn(),
+  hash: mockHash,
+  compare: mockCompare,
 }));
 
 import bcrypt from 'bcrypt';
@@ -38,8 +42,8 @@ describe('User Model', () => {
         updated_at: new Date(),
       };
 
-      (bcrypt.hash as jest.Mock).mockResolvedValue('hashed-password');
-      mockPool.query.mockResolvedValue({ rows: [mockUser] });
+      mockHash.mockResolvedValue('hashed-password');
+      mockQuery.mockResolvedValue({ rows: [mockUser] });
 
       const result = await createUser({
         email: 'test@example.com',
@@ -48,8 +52,8 @@ describe('User Model', () => {
         last_name: 'Doe',
       });
 
-      expect(bcrypt.hash).toHaveBeenCalledWith('password123', 12);
-      expect(mockPool.query).toHaveBeenCalledWith(
+      expect(mockHash).toHaveBeenCalledWith('password123', 12);
+      expect(mockQuery).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO users'),
         expect.arrayContaining(['user-id', 'test@example.com', 'hashed-password', 'John', 'Doe', 'customer'])
       );
@@ -78,8 +82,8 @@ describe('User Model', () => {
         updated_at: new Date(),
       };
 
-      (bcrypt.hash as jest.Mock).mockResolvedValue('hashed-password');
-      mockPool.query.mockResolvedValue({ rows: [mockUser] });
+      mockHash.mockResolvedValue('hashed-password');
+      mockQuery.mockResolvedValue({ rows: [mockUser] });
 
       await createUser({
         email: 'test@example.com',
@@ -88,7 +92,7 @@ describe('User Model', () => {
         last_name: 'Doe',
       });
 
-      expect(mockPool.query).toHaveBeenCalledWith(
+      expect(mockQuery).toHaveBeenCalledWith(
         expect.any(String),
         expect.arrayContaining(['customer'])
       );
@@ -109,11 +113,11 @@ describe('User Model', () => {
         updated_at: new Date(),
       };
 
-      mockPool.query.mockResolvedValue({ rows: [mockUser] });
+      mockQuery.mockResolvedValue({ rows: [mockUser] });
 
       const result = await findByEmail('test@example.com');
 
-      expect(mockPool.query).toHaveBeenCalledWith(
+      expect(mockQuery).toHaveBeenCalledWith(
         'SELECT * FROM users WHERE email = $1 AND is_active = true',
         ['test@example.com']
       );
@@ -121,7 +125,7 @@ describe('User Model', () => {
     });
 
     it('should return null if user not found', async () => {
-      mockPool.query.mockResolvedValue({ rows: [] });
+      mockQuery.mockResolvedValue({ rows: [] });
 
       const result = await findByEmail('nonexistent@example.com');
 
@@ -129,11 +133,11 @@ describe('User Model', () => {
     });
 
     it('should lowercase email', async () => {
-      mockPool.query.mockResolvedValue({ rows: [] });
+      mockQuery.mockResolvedValue({ rows: [] });
 
       await findByEmail('TEST@EXAMPLE.COM');
 
-      expect(mockPool.query).toHaveBeenCalledWith(
+      expect(mockQuery).toHaveBeenCalledWith(
         expect.any(String),
         ['test@example.com']
       );
@@ -154,7 +158,7 @@ describe('User Model', () => {
         updated_at: new Date(),
       };
 
-      mockPool.query.mockResolvedValue({ rows: [mockUser] });
+      mockQuery.mockResolvedValue({ rows: [mockUser] });
 
       const result = await findById('user-id');
 
@@ -172,7 +176,7 @@ describe('User Model', () => {
     });
 
     it('should return null if user not found', async () => {
-      mockPool.query.mockResolvedValue({ rows: [] });
+      mockQuery.mockResolvedValue({ rows: [] });
 
       const result = await findById('nonexistent-id');
 
@@ -194,7 +198,7 @@ describe('User Model', () => {
         updated_at: new Date(),
       };
 
-      mockPool.query.mockResolvedValue({ rows: [mockUser] });
+      mockQuery.mockResolvedValue({ rows: [mockUser] });
 
       const result = await findByIdWithHash('user-id');
 
@@ -202,7 +206,7 @@ describe('User Model', () => {
     });
 
     it('should return null if user not found', async () => {
-      mockPool.query.mockResolvedValue({ rows: [] });
+      mockQuery.mockResolvedValue({ rows: [] });
 
       const result = await findByIdWithHash('nonexistent-id');
 
@@ -224,7 +228,7 @@ describe('User Model', () => {
         updated_at: new Date(),
       };
 
-      mockPool.query.mockResolvedValue({ rows: [mockUser] });
+      mockQuery.mockResolvedValue({ rows: [mockUser] });
 
       const result = await updateUser('user-id', {
         first_name: 'Jane',
@@ -232,7 +236,7 @@ describe('User Model', () => {
         email: 'newemail@example.com',
       });
 
-      expect(mockPool.query).toHaveBeenCalledWith(
+      expect(mockQuery).toHaveBeenCalledWith(
         expect.stringContaining('UPDATE users SET'),
         expect.arrayContaining(['Jane', 'Smith', 'newemail@example.com', 'user-id'])
       );
@@ -249,7 +253,7 @@ describe('User Model', () => {
     });
 
     it('should return null if user not found', async () => {
-      mockPool.query.mockResolvedValue({ rows: [] });
+      mockQuery.mockResolvedValue({ rows: [] });
 
       const result = await updateUser('nonexistent-id', { first_name: 'Jane' });
 
@@ -269,11 +273,11 @@ describe('User Model', () => {
         updated_at: new Date(),
       };
 
-      mockPool.query.mockResolvedValue({ rows: [mockUser] });
+      mockQuery.mockResolvedValue({ rows: [mockUser] });
 
       const result = await updateUser('user-id', {});
 
-      expect(mockPool.query).not.toHaveBeenCalled();
+      expect(mockQuery).not.toHaveBeenCalled();
       expect(result).toEqual({
         id: 'user-id',
         email: 'test@example.com',
@@ -314,17 +318,17 @@ describe('User Model', () => {
         },
       ];
 
-      mockPool.query
+      mockQuery
         .mockResolvedValueOnce({ rows: mockUsers })
         .mockResolvedValueOnce({ rows: [{ count: '10' }] });
 
       const result = await listUsers(1, 20);
 
-      expect(mockPool.query).toHaveBeenCalledWith(
+      expect(mockQuery).toHaveBeenCalledWith(
         'SELECT * FROM users WHERE is_active = true ORDER BY created_at DESC LIMIT $1 OFFSET $2',
         [20, 0]
       );
-      expect(mockPool.query).toHaveBeenCalledWith(
+      expect(mockQuery).toHaveBeenCalledWith(
         'SELECT COUNT(*) as count FROM users WHERE is_active = true',
         []
       );
@@ -336,16 +340,16 @@ describe('User Model', () => {
 
   describe('verifyPassword', () => {
     it('should verify password correctly', async () => {
-      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+      mockCompare.mockResolvedValue(true);
 
       const result = await verifyPassword('plaintext', 'hash');
 
-      expect(bcrypt.compare).toHaveBeenCalledWith('plaintext', 'hash');
+      expect(mockCompare).toHaveBeenCalledWith('plaintext', 'hash');
       expect(result).toBe(true);
     });
 
     it('should return false for invalid password', async () => {
-      (bcrypt.compare as jest.Mock).mockResolvedValue(false);
+      mockCompare.mockResolvedValue(false);
 
       const result = await verifyPassword('wrong', 'hash');
 
