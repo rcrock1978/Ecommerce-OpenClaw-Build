@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patchesStrategicMerge:
+  - production-patches.yaml
+
+namespace: ecommerce-production
+
+images:
+  - name: cart-service
+    newTag: main
+  - name: order-service
+    newTag: main
+  - name: inventory-service
+    newTag: main
+  - name: notification-service
+    newTag: main
+  - name: review-service
+    newTag: main
+  - name: shipping-service
+    newTag: main

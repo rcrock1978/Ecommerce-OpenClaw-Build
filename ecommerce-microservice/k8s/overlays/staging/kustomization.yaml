@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patchesStrategicMerge:
+  - staging-patches.yaml
+
+namespace: ecommerce-staging
+
+images:
+  - name: cart-service
+    newTag: develop
+  - name: order-service
+    newTag: develop
+  - name: inventory-service
+    newTag: develop
+  - name: notification-service
+    newTag: develop
+  - name: review-service
+    newTag: develop
+  - name: shipping-service
+    newTag: develop

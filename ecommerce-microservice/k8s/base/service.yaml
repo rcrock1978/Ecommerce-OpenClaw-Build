@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .ServiceName }}-service
+  namespace: ecommerce
+  labels:
+    app: {{ .ServiceName }}
+spec:
+  selector:
+    app: {{ .ServiceName }}
+  ports:
+  - port: {{ .Port }}
+    targetPort: {{ .Port }}
+    protocol: TCP
+  type: ClusterIP

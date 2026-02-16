@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .ServiceName }}-deployment
+  namespace: ecommerce
+  labels:
+    app: {{ .ServiceName }}
+spec:
+  replicas: {{ .Replicas }}
+  selector:
+    matchLabels:
+      app: {{ .ServiceName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .ServiceName }}
+    spec:
+      containers:
+      - name: {{ .ServiceName }}
+        image: {{ .Image }}:{{ .Tag }}
+        ports:
+        - containerPort: {{ .Port }}
+        env:
+        - name: PORT
+          value: "{{ .Port }}"
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: ecommerce-config
+              key: NODE_ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: ecommerce-config
+              key: LOG_LEVEL
+        envFrom:
+        - secretRef:
+            name: ecommerce-secrets
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Port }}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Port }}
+          initialDelaySeconds: 5
+          periodSeconds: 5
