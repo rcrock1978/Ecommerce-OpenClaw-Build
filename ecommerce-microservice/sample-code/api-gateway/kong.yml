@@ -1,0 +1,126 @@
+_format_version: "3.0"
+
+# ═══════════════════════════════════════════════════════════════════════
+# Kong Declarative Configuration — E-Commerce Platform
+# ═══════════════════════════════════════════════════════════════════════
+
+# ── Global Plugins ───────────────────────────────────────────────────
+
+plugins:
+  - name: cors
+    config:
+      origins: ["*"]
+      methods: [GET, POST, PUT, PATCH, DELETE, OPTIONS]
+      headers: [Authorization, Content-Type, Accept]
+      credentials: true
+      max_age: 3600
+
+  - name: rate-limiting
+    config:
+      minute: 120
+      hour: 3600
+      policy: redis
+      redis_host: redis
+      redis_port: 6379
+      fault_tolerant: true
+      hide_client_headers: false
+
+  - name: jwt
+    config:
+      uri_param_names: []
+      cookie_names: []
+      header_names: [Authorization]
+      claims_to_verify: [exp]
+      run_on_preflight: true
+
+# ── Services & Routes ────────────────────────────────────────────────
+
+services:
+  # 1. User Service
+  - name: user-service
+    url: http://user-service:3001
+    routes:
+      - name: user-auth
+        paths: [/api/v1/auth]
+        strip_path: true
+        plugins:
+          - name: jwt
+            enabled: false          # Auth routes are public
+      - name: user-management
+        paths: [/api/v1/users]
+        strip_path: true
+
+  # 2. Product Catalog Service
+  - name: product-service
+    url: http://product-service:3002
+    routes:
+      - name: products
+        paths: [/api/v1/products]
+        strip_path: true
+      - name: categories
+        paths: [/api/v1/categories]
+        strip_path: true
+
+  # 3. Inventory Service
+  - name: inventory-service
+    url: http://inventory-service:3003
+    routes:
+      - name: inventory
+        paths: [/api/v1/inventory]
+        strip_path: true
+
+  # 4. Order Service
+  - name: order-service
+    url: http://order-service:3004
+    routes:
+      - name: orders
+        paths: [/api/v1/orders]
+        strip_path: true
+
+  # 5. Payment Service
+  - name: payment-service
+    url: http://payment-service:3005
+    routes:
+      - name: payments
+        paths: [/api/v1/payments]
+        strip_path: true
+
+  # 6. Cart Service
+  - name: cart-service
+    url: http://cart-service:3006
+    routes:
+      - name: cart
+        paths: [/api/v1/cart]
+        strip_path: true
+
+  # 7. Notification Service
+  - name: notification-service
+    url: http://notification-service:3007
+    routes:
+      - name: notifications
+        paths: [/api/v1/notifications]
+        strip_path: true
+
+  # 8. Search Service
+  - name: search-service
+    url: http://search-service:3008
+    routes:
+      - name: search
+        paths: [/api/v1/search]
+        strip_path: true
+
+  # 9. Review / Rating Service
+  - name: review-service
+    url: http://review-service:3009
+    routes:
+      - name: reviews
+        paths: [/api/v1/reviews]
+        strip_path: true
+
+  # 10. Shipping Service
+  - name: shipping-service
+    url: http://shipping-service:3010
+    routes:
+      - name: shipping
+        paths: [/api/v1/shipping]
+        strip_path: true
