@@ -1,31 +1,18 @@
 import request from 'supertest';
 import { jest } from '@jest/globals';
-import app from '../index';
-import { User, UserRole } from '../types';
-
-// Mock the database functions
-const mockCreateUser = jest.fn() as jest.MockedFunction<any>;
-const mockFindByEmail = jest.fn() as jest.MockedFunction<any>;
-const mockFindByIdWithHash = jest.fn() as jest.MockedFunction<any>;
-const mockVerifyPassword = jest.fn() as jest.MockedFunction<any>;
 
 jest.mock('../models/user', () => ({
-  createUser: mockCreateUser,
-  findByEmail: mockFindByEmail,
-  findByIdWithHash: mockFindByIdWithHash,
-  verifyPassword: mockVerifyPassword,
+  createUser: jest.fn(),
+  findByEmail: jest.fn(),
+  findByIdWithHash: jest.fn(),
+  verifyPassword: jest.fn(),
 }));
-
-// Mock jsonwebtoken
-const mockSign = jest.fn() as jest.MockedFunction<any>;
-const mockVerify = jest.fn() as jest.MockedFunction<any>;
 
 jest.mock('jsonwebtoken', () => ({
-  sign: mockSign,
-  verify: mockVerify,
+  sign: jest.fn(),
+  verify: jest.fn(),
 }));
 
-// Mock logger
 jest.mock('../utils/logger', () => ({
   default: {
     info: jest.fn(),
@@ -34,6 +21,18 @@ jest.mock('../utils/logger', () => ({
   },
 }));
 
+import app from '../index';
+import { User, UserRole } from '../types';
+import jwt from 'jsonwebtoken';
+import { createUser, findByEmail, findByIdWithHash, verifyPassword } from '../models/user';
+
+const mockCreateUser = createUser as jest.MockedFunction<any>;
+const mockFindByEmail = findByEmail as jest.MockedFunction<any>;
+const mockFindByIdWithHash = findByIdWithHash as jest.MockedFunction<any>;
+const mockVerifyPassword = verifyPassword as jest.MockedFunction<any>;
+const mockSign = jwt.sign as jest.MockedFunction<any>;
+const mockVerify = jwt.verify as jest.MockedFunction<any>;
+
 describe('Auth Routes Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -41,10 +40,9 @@ describe('Auth Routes Integration', () => {
 
   describe('POST /auth/register', () => {
     it('should register a new user successfully', async () => {
-      const newUser: User = {
+      const mockUser = {
         id: 'user-id',
         email: 'test@example.com',
-        password_hash: 'hashed-password',
         first_name: 'John',
         last_name: 'Doe',
         role: UserRole.CUSTOMER,
@@ -54,16 +52,7 @@ describe('Auth Routes Integration', () => {
       };
 
       mockFindByEmail.mockResolvedValue(null);
-      mockCreateUser.mockResolvedValue({
-        id: newUser.id,
-        email: newUser.email,
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
-        role: newUser.role,
-        is_active: newUser.is_active,
-        created_at: newUser.created_at,
-        updated_at: newUser.updated_at,
-      });
+      mockCreateUser.mockResolvedValue(mockUser);
       mockSign
         .mockReturnValueOnce('access-token')
         .mockReturnValueOnce('refresh-token');
@@ -88,7 +77,7 @@ describe('Auth Routes Integration', () => {
         password: 'password123',
         first_name: 'John',
         last_name: 'Doe',
-        role: undefined,
+        role: UserRole.CUSTOMER,
       });
     });
 
@@ -127,10 +116,10 @@ describe('Auth Routes Integration', () => {
 
   describe('POST /auth/login', () => {
     it('should login user successfully', async () => {
-      const user: User = {
+      const mockUser = {
         id: 'user-id',
         email: 'test@example.com',
-        password_hash: 'hashed-password',
+        password_hash: 'hashed',
         first_name: 'John',
         last_name: 'Doe',
         role: UserRole.CUSTOMER,
@@ -139,7 +128,7 @@ describe('Auth Routes Integration', () => {
         updated_at: new Date(),
       };
 
-      mockFindByEmail.mockResolvedValue(user);
+      mockFindByEmail.mockResolvedValue(mockUser);
       mockVerifyPassword.mockResolvedValue(true);
       mockSign
         .mockReturnValueOnce('access-token')
@@ -158,7 +147,7 @@ describe('Auth Routes Integration', () => {
       expect(response.body.data).toHaveProperty('accessToken');
       expect(response.body.data).toHaveProperty('refreshToken');
       expect(mockFindByEmail).toHaveBeenCalledWith('test@example.com');
-      expect(mockVerifyPassword).toHaveBeenCalledWith('password123', 'hashed-password');
+      expect(mockVerifyPassword).toHaveBeenCalledWith('password123', 'hashed');
     });
 
     it('should return 401 for invalid credentials', async () => {
@@ -177,10 +166,10 @@ describe('Auth Routes Integration', () => {
     });
 
     it('should return 401 for wrong password', async () => {
-      const user: User = {
+      const mockUser = {
         id: 'user-id',
         email: 'test@example.com',
-        password_hash: 'hashed-password',
+        password_hash: 'hashed',
         first_name: 'John',
         last_name: 'Doe',
         role: UserRole.CUSTOMER,
@@ -189,7 +178,7 @@ describe('Auth Routes Integration', () => {
         updated_at: new Date(),
       };
 
-      mockFindByEmail.mockResolvedValue(user);
+      mockFindByEmail.mockResolvedValue(mockUser);
       mockVerifyPassword.mockResolvedValue(false);
 
       const response = await request(app)
@@ -207,10 +196,10 @@ describe('Auth Routes Integration', () => {
 
   describe('POST /auth/refresh-token', () => {
     it('should refresh tokens successfully', async () => {
-      const user: User = {
+      const mockUser = {
         id: 'user-id',
         email: 'test@example.com',
-        password_hash: 'hashed-password',
+        password_hash: 'hashed',
         first_name: 'John',
         last_name: 'Doe',
         role: UserRole.CUSTOMER,
@@ -220,7 +209,7 @@ describe('Auth Routes Integration', () => {
       };
 
       mockVerify.mockReturnValue({ userId: 'user-id', tokenVersion: 0 });
-      mockFindByIdWithHash.mockResolvedValue(user);
+      mockFindByIdWithHash.mockResolvedValue(mockUser);
       mockSign
         .mockReturnValueOnce('new-access-token')
         .mockReturnValueOnce('new-refresh-token');

@@ -9,16 +9,17 @@ import (
 )
 
 type Config struct {
-	Port            int
-	Environment     string
-	JWTSecret       string
+	Port             int
+	Environment      string
+	JWTSecret        string
 	JWTRefreshSecret string
-	DatabaseURL     string
-	KafkaBrokers    []string
-	StripeSecretKey string
+	DatabaseURL      string
+	KafkaBrokers     []string
+	StripeSecretKey  string
 	StripePublishableKey string
 	StripeWebhookSecret  string
-	UseStripeMock   bool
+	UseStripeMock    bool
+	BackoffFactor    float64
 }
 
 func Load() *Config {
@@ -33,6 +34,7 @@ func Load() *Config {
 		StripePublishableKey:  getEnv("STRIPE_PUBLISHABLE_KEY", ""),
 		StripeWebhookSecret:   getEnv("STRIPE_WEBHOOK_SECRET", ""),
 		UseStripeMock:         getEnvAsBool("USE_STRIPE_MOCK", true),
+		BackoffFactor:         getEnvAsFloat("BACKOFF_FACTOR", 2.0),
 	}
 }
 
@@ -59,6 +61,16 @@ func getEnvAsBool(key string, defaultValue bool) bool {
 			return boolValue
 		}
 		log.Printf("Invalid value for %s, using default: %t", key, defaultValue)
+	}
+	return defaultValue
+}
+
+func getEnvAsFloat(key string, defaultValue float64) float64 {
+	if value := os.Getenv(key); value != "" {
+		if floatValue, err := strconv.ParseFloat(value, 64); err == nil {
+			return floatValue
+		}
+		log.Printf("Invalid value for %s, using default: %f", key, defaultValue)
 	}
 	return defaultValue
 }
