@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1771351781048" clover="3.2.0">
+  <project timestamp="1771351781048" name="All files">
+    <metrics statements="191" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="40" coveredmethods="0" elements="267" coveredelements="0" complexity="0" loc="191" ncloc="191" packages="6" files="7" classes="7"/>
+    <package name="config">
+      <metrics statements="39" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="9" coveredmethods="0"/>
+      <file name="database.ts" path="/home/robbie/.openclaw/workspace/ecommerce-microservice/sample-code/shipping-service/src/config/database.ts">
+        <metrics statements="16" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+      </file>
+      <file name="kafka.ts" path="/home/robbie/.openclaw/workspace/ecommerce-microservice/sample-code/shipping-service/src/config/kafka.ts">
+        <metrics statements="23" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="41" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="database">
+      <metrics statements="34" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
+      <file name="migrate.ts" path="/home/robbie/.openclaw/workspace/ecommerce-microservice/sample-code/shipping-service/src/database/migrate.ts">
+        <metrics statements="34" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="middleware">
+      <metrics statements="18" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <file name="validate.ts" path="/home/robbie/.openclaw/workspace/ecommerce-microservice/sample-code/shipping-service/src/middleware/validate.ts">
+        <metrics statements="18" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="models">
+      <metrics statements="61" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <file name="shipping.ts" path="/home/robbie/.openclaw/workspace/ecommerce-microservice/sample-code/shipping-service/src/models/shipping.ts">
+        <metrics statements="61" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="121" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="145" count="0" type="stmt"/>
+        <line num="149" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="151" count="0" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
+        <line num="176" count="0" type="stmt"/>
+        <line num="178" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
+        <line num="180" count="0" type="stmt"/>
+        <line num="182" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="185" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="186" count="0" type="stmt"/>
+        <line num="187" count="0" type="stmt"/>
+        <line num="190" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="191" count="0" type="stmt"/>
+        <line num="192" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="196" count="0" type="stmt"/>
+        <line num="197" count="0" type="stmt"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="201" count="0" type="stmt"/>
+        <line num="204" count="0" type="stmt"/>
+        <line num="209" count="0" type="stmt"/>
+        <line num="211" count="0" type="stmt"/>
+        <line num="213" count="0" type="stmt"/>
+        <line num="214" count="0" type="stmt"/>
+        <line num="216" count="0" type="stmt"/>
+        <line num="221" count="0" type="stmt"/>
+        <line num="227" count="0" type="stmt"/>
+        <line num="232" count="0" type="stmt"/>
+        <line num="233" count="0" type="stmt"/>
+        <line num="234" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="235" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="services">
+      <metrics statements="34" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <file name="shippingService.ts" path="/home/robbie/.openclaw/workspace/ecommerce-microservice/sample-code/shipping-service/src/services/shippingService.ts">
+        <metrics statements="34" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="81" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="utils">
+      <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="logger.ts" path="/home/robbie/.openclaw/workspace/ecommerce-microservice/sample-code/shipping-service/src/utils/logger.ts">
+        <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

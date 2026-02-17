@@ -15,6 +15,17 @@ jest.mock('../utils/logger', () => ({
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(),
 }));
+jest.mock('../config/database', () => ({
+  pool: {
+    query: jest.fn(),
+    on: jest.fn(),
+    connect: jest.fn(),
+    end: jest.fn(),
+  },
+  connectDatabase: jest.fn(),
+  disconnectDatabase: jest.fn(),
+}));
+
 
 import request from 'supertest';
 import app from '../index';

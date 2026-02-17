@@ -1,19 +1,22 @@
 import { jest } from '@jest/globals';
 import { CartService } from '../services/cartService';
-import { Cart, CartItem } from '../types';
+import { Cart } from '../types';
 
 // Mock Redis client
-const mockRedis = {
-  get: jest.fn(),
-  set: jest.fn(),
-  setEx: jest.fn(),
-  del: jest.fn(),
-  expire: jest.fn(),
-};
+var mockRedis: any;
 
-jest.mock('../config/redis', () => ({
-  getRedisClient: () => mockRedis,
-}));
+jest.mock('../config/redis', () => {
+  mockRedis = {
+    get: jest.fn() as any,
+    set: jest.fn() as any,
+    setEx: jest.fn() as any,
+    del: jest.fn() as any,
+    expire: jest.fn() as any,
+  };
+  return {
+    getRedisClient: () => mockRedis,
+  };
+});
 
 describe('CartService', () => {
   let cartService: CartService;
@@ -156,11 +159,11 @@ describe('CartService', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      mockRedis.get.mockImplementation((key: string) => {
+      mockRedis.get.mockImplementation(((key: string) => {
         if (key === 'cart:session1') return Promise.resolve(JSON.stringify(sessionCart));
         if (key === 'cart:user1') return Promise.resolve(JSON.stringify(userCart));
         return Promise.resolve(null);
-      });
+      }) as any);
       mockRedis.set.mockResolvedValue('OK');
       mockRedis.del.mockResolvedValue(1);
 

@@ -28,5 +28,3 @@ export function getRedisClient(): RedisClientType {
   }
   return redisClient;
 }
-
-export default redisClient;

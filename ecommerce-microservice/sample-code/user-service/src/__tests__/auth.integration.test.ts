@@ -15,6 +15,17 @@ jest.mock('jsonwebtoken', () => ({
 
 jest.mock('../utils/logger', () => ({
   default: {
+jest.mock('../config/database', () => ({
+  pool: {
+    query: jest.fn(),
+    on: jest.fn(),
+    connect: jest.fn(),
+    end: jest.fn(),
+  },
+  connectDatabase: jest.fn(),
+  disconnectDatabase: jest.fn(),
+}));
+
     info: jest.fn(),
     error: jest.fn(),
     warn: jest.fn(),
