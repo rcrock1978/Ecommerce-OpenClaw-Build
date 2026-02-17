@@ -1,7 +1,6 @@
 import { Pool } from 'pg';
 import { getDatabasePool } from '../config/database';
 import { InventoryItem, InventoryMovement, StockAlert } from '../types';
-import logger from '../utils/logger';
 
 export class InventoryModel {
   private pool: Pool = getDatabasePool();

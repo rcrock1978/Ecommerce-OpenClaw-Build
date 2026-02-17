@@ -136,12 +136,14 @@ export class InventoryService {
         inventoryId: inventory.id!,
         alertType: 'out_of_stock',
         message: `Product ${inventory.productId} is out of stock`,
+        acknowledged: false,
       });
     } else if (inventory.quantityAvailable <= inventory.lowStockThreshold) {
       await this.inventoryModel.createAlert({
         inventoryId: inventory.id!,
         alertType: 'low_stock',
         message: `Product ${inventory.productId} is low on stock (${inventory.quantityAvailable} remaining)`,
+        acknowledged: false,
       });
     }
   }

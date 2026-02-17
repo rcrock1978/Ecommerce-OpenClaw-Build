@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import Joi from 'joi';
-import { validateBody, validateQuery } from '../middleware/validate';
+import { validateBody } from '../middleware/validate';
 import inventoryService from '../services/inventoryService';
 import logger from '../utils/logger';
 
@@ -65,6 +65,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
 
     res.json({ success: true, data: item });
+    return;
   } catch (error) {
     logger.error('Error getting inventory', { id: req.params.id, error });
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -83,6 +84,7 @@ router.get('/product/:productId', async (req: Request, res: Response) => {
     }
 
     res.json({ success: true, data: item });
+    return;
   } catch (error) {
     logger.error('Error getting inventory by product', { productId: req.params.productId, error });
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -100,6 +102,7 @@ router.get('/sku/:sku', async (req: Request, res: Response) => {
     }
 
     res.json({ success: true, data: item });
+    return;
   } catch (error) {
     logger.error('Error getting inventory by SKU', { sku: req.params.sku, error });
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -112,6 +115,7 @@ router.put('/:id', validateBody(updateInventorySchema), async (req: Request, res
     const { id } = req.params;
     await inventoryService.updateInventory(id, req.body);
     res.json({ success: true, message: 'Inventory updated' });
+    return;
   } catch (error) {
     logger.error('Error updating inventory', { id: req.params.id, body: req.body, error });
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -123,6 +127,7 @@ router.post('/reserve', validateBody(reserveStockSchema), async (req: Request, r
   try {
     await inventoryService.reserveStock(req.body);
     res.json({ success: true, message: 'Stock reserved' });
+    return;
   } catch (error) {
     if (error instanceof Error && error.message === 'Inventory item not found') {
       return res.status(404).json({ success: false, message: 'Inventory item not found' });
@@ -140,6 +145,7 @@ router.post('/release', validateBody(releaseStockSchema), async (req: Request, r
   try {
     await inventoryService.releaseStock(req.body);
     res.json({ success: true, message: 'Stock released' });
+    return;
   } catch (error) {
     if (error instanceof Error && error.message === 'Inventory item not found') {
       return res.status(404).json({ success: false, message: 'Inventory item not found' });
@@ -153,10 +159,11 @@ router.post('/release', validateBody(releaseStockSchema), async (req: Request, r
 });
 
 // Get low stock items
-router.get('/alerts/low-stock', async (req: Request, res: Response) => {
+router.get('/alerts/low-stock', async (_req: Request, res: Response) => {
   try {
     const items = await inventoryService.getLowStockItems();
     res.json({ success: true, data: items });
+    return;
   } catch (error) {
     logger.error('Error getting low stock items', { error });
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -164,10 +171,11 @@ router.get('/alerts/low-stock', async (req: Request, res: Response) => {
 });
 
 // Get out of stock items
-router.get('/alerts/out-of-stock', async (req: Request, res: Response) => {
+router.get('/alerts/out-of-stock', async (_req: Request, res: Response) => {
   try {
     const items = await inventoryService.getOutOfStockItems();
     res.json({ success: true, data: items });
+    return;
   } catch (error) {
     logger.error('Error getting out of stock items', { error });
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -175,10 +183,11 @@ router.get('/alerts/out-of-stock', async (req: Request, res: Response) => {
 });
 
 // Get stock alerts
-router.get('/alerts', async (req: Request, res: Response) => {
+router.get('/alerts', async (_req: Request, res: Response) => {
   try {
     const alerts = await inventoryService.getStockAlerts();
     res.json({ success: true, data: alerts });
+    return;
   } catch (error) {
     logger.error('Error getting stock alerts', { error });
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -192,6 +201,7 @@ router.put('/alerts/:alertId/acknowledge', async (req: Request, res: Response) =
     const { acknowledgedBy } = req.body;
     await inventoryService.acknowledgeAlert(alertId, acknowledgedBy || 'system');
     res.json({ success: true, message: 'Alert acknowledged' });
+    return;
   } catch (error) {
     logger.error('Error acknowledging alert', { alertId: req.params.alertId, error });
     res.status(500).json({ success: false, message: 'Internal server error' });
